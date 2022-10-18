@@ -33,12 +33,9 @@ class Game
 
     public function createHero()
     {
-
-
         $loop = true;
-
-        $health = 10;
-        $damage = 2;
+        $health = 50;
+        $damage = 3;
         $luck = 0;
         $race = '';
         echo "Создание персонажа.\n";
@@ -88,7 +85,7 @@ class Game
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
                     if (rand(0, 1)) {
-                        $enemy = new Enemy(rand($player->level, ($player->level) + 2), array_rand($this->races, 1), $this->names[array_rand($this->names, 1)]);
+                        $enemy = new Enemy(rand($player->level, ($player->level) + 2), $this->races[array_rand($this->races, 1)], $this->names[array_rand($this->names, 1)]);
                         $this->fight($player, $enemy);
                     } else {
                         echo "Вам повезло избежать драки\n";
@@ -119,16 +116,18 @@ class Game
         echo "Имя: " . "\e[1;37m" . $player->name . "\e[0m\n";
         echo "Уровень: " . "\e[1;37m" . $player->level . "\e[0m\n";
         echo "Раса: " . "\e[1;37m" . $player->race . "\e[0m\n";
-        echo "Здоровье: " . "\e[1;32m" . $player->health . "\e[0m\n";
+        echo "Текущее здоровье: " . "\e[1;32m" . $player->currentHealth . "/" . $player->maxHealth . "\e[0m\n";
         echo "Урон: " . "\e[1;31m" . $player->damage . "\e[0m\n";
         echo "Удача: " . "\e[1;33m" . $player->luck . "\e[0m\n";
         echo "Броня: " . "\e[1;37m" . $player->armor . "\e[0m\n";
+        echo "Крит. урон: " . "\e[1;37m" . $player->critDamage . "%\e[0m\n";
+        echo "Крит. шанс: " . "\e[1;37m" . $player->critChance . "%\e[0m\n";
     }
 
-    public function fight($player, $enemy): void
+    public function fight($player, $enemy)
     {
-        while ($player->health > 0 && $enemy->health > 0) {
-            echo "\e[1;37mНа вас напал\e[0m " . "\e[1;31m" . $enemy->name . "\e[0m" . "\n";
+        echo "\e[1;37mНа вас напал\e[0m " . "\e[1;31m" . $enemy->name . "\e[0m (" . $enemy->race . ")" . "\n";
+        while ($player->currentHealth > 0 && $enemy->currentHealth > 0) {
             echo " 1. Атаковать.\n 2. Сбежать.\n";
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
