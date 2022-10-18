@@ -26,6 +26,7 @@ class Inventory
 
     public function showInventory()
     {
+        $this->inventorySort();
         $number = 1;
         echo "\e[1;37mВаш инвентарь:\e[0m\n";
         foreach ($this->inventory as $item) {
@@ -40,10 +41,15 @@ class Inventory
 
     public function inventorySort()
     {
-
+        $tempArrayStacable = [];
+        $tempArrayNotStacable = [];
         for ($i = 0; $i < count($this->inventory); $i++) {
             if ($this->inventory[$i]->isStacable) {
+                array_push($tempArrayStacable, $this->inventory[$i]);
+            } else {
+                array_push($tempArrayNotStacable, $this->inventory[$i]);
             }
         }
+        $this->inventory = array_merge($tempArrayStacable, $tempArrayNotStacable);
     }
 }
