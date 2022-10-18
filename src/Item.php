@@ -9,11 +9,12 @@ abstract class Item
     public $rarity;
     public $level;
     public $cost;
+    public $dropChance;
     // echo "\e[1;33mЛегендарное!\e[0m\n"; // Желтый
     // echo "\e[1;32mНеобычное!\e[0m\n"; // Зеленый
     // echo "\e[1;34mРедкое!\e[0m\n"; // Синий
     // echo "\e[1;31mМифическое!\e[0m\n"; // Красный
-    public function __construct(string $Name, int $Rarity, int $Level, int $Cost)
+    public function __construct(string $Name, int $Rarity, int $Level, int $Cost, float $DropChance)
     {
         $this->name = $Name;
         switch ($Rarity) {
@@ -38,5 +39,6 @@ abstract class Item
         }
         $this->level = $Level;
         $this->cost = $Cost;
+        $this->dropChance = $DropChance;
     }
 }
