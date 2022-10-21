@@ -80,7 +80,12 @@ class Game
     {
         $loop = true;
         while ($loop) {
-            echo "\e[1;37mЧто будете делать?\e[0m\n 1. Отравиться в приключение.\n 2. Посетить торговца.\n 3. Инвентарь.\n 4. Характеристики.\n";
+
+            if($player->isDead) {
+                $player->resurrection();
+            }
+            
+            echo "\e[1;37mЧто будете делать?\e[0m\n 1. Отравиться в приключение.\n 2. Посетить торговца.\n 3. Инвентарь.\n 4. Экипировка.\n 5. Характеристики.\n";
 
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
@@ -99,11 +104,17 @@ class Game
                     $player->inventory->showInventory();
                     break;
                 case 4:
-                    $this->showStats($player);
+                    // equipment
                     break;
                 case 5:
-                    # code...
-                    $loop = false;
+                    $this->showStats($player);
+                    break;
+                case 6:
+                    
+                case 7:
+                    
+                case 8:
+                    
 
                 default:
                     echo "Выберите существующий вариант\n";
@@ -127,7 +138,7 @@ class Game
     public function fight($player, $enemy)
     {
         echo "\e[1;37mНа вас напал\e[0m " . "\e[1;31m" . $enemy->name . "\e[0m (" . $enemy->race . ")" . "\n";
-        while ($player->currentHealth > 0 && $enemy->currentHealth > 0) {
+        while (!$player->isDead && !$enemy->isDead) {
             echo " 1. Атаковать.\n 2. Сбежать.\n";
             switch ((int)readline('Выберите действие: ')) {
                 case 1:

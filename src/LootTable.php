@@ -38,7 +38,7 @@ class LootTable
                 }
                 return $this->droppedLoot;
             } else {
-                return $this->droppedLoot = null;
+                return null;
             }
         }
     }
