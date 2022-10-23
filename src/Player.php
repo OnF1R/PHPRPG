@@ -12,7 +12,13 @@ class Player
     public $currentHealth;
     public $damage;
     public $race;
+    public $nextLevelExp;
+    public $currentExp;
 
+
+    public $equipment;
+
+    
     public $luck;
     public $armor;
 
@@ -35,6 +41,20 @@ class Player
         $this->inventory = new Inventory;
         $this->isDead = false;
         $this->currentHealth = $this->maxHealth;
+
+        $this->equipment = [
+            "LeftHand" => null,
+            "RightHand" => null,
+            "Helmet" => null,
+            "Chest" => null,
+            "Gloves" => null,
+            "Leggs" => null,
+            "Boots" => null,
+            "FirstRing" => null,
+            "SecondRing" => null,
+            "Cape" => null,
+            "Trinket" => null,
+        ];
     }
 
     public function basicAttack($enemy)
@@ -89,4 +109,88 @@ class Player
         $this->isDead = false;
         echo $this->name . " \e[1;32mвозрождён\e[0m\n";
     }
+
+    public function equip($item, $slot)
+    {
+        $this->equipment[$slot] = $item;
+    }
+
+    public function showStats()
+    {
+        echo "Имя: " . "\e[1;37m" . $this->name . "\e[0m\n";
+        echo "Уровень: " . "\e[1;37m" . $this->level . "\e[0m\n";
+        echo "Раса: " . "\e[1;37m" . $this->race . "\e[0m\n";
+        echo "Текущее здоровье: " . "\e[1;32m" . $this->currentHealth . "/" . $this->maxHealth . "\e[0m\n";
+        echo "Урон: " . "\e[1;31m" . $this->damage . "\e[0m\n";
+        echo "Удача: " . "\e[1;33m" . $this->luck . "\e[0m\n";
+        echo "Броня: " . "\e[1;37m" . $this->armor . "\e[0m\n";
+        echo "Крит. урон: " . "\e[1;37m" . $this->critDamage . "%\e[0m\n";
+        echo "Крит. шанс: " . "\e[1;37m" . $this->critChance . "%\e[0m\n";
+    }
+
+    public function showEquipment()
+    {
+        $number = 1;
+        echo $number++ . ". " . "Шлем: " . "\e[1;37m" . $this->equipment["Helmet"] . "\e[0m\n";
+        echo $number++ . ". " . "Нагрудник: " . "\e[1;37m" . $this->equipment["Chest"] . "\e[0m\n";
+        echo $number++ . ". " . "Плащ: " . "\e[1;37m" . $this->equipment["Cape"] . "\e[0m\n";
+        echo $number++ . ". " . "Перчатки: " . "\e[1;37m" . $this->equipment["Gloves"] . "\e[0m\n";
+        echo $number++ . ". " . "Поножи: " . "\e[1;37m" . $this->equipment["Leggs"] . "\e[0m\n";
+        echo $number++ . ". " . "Ботинки: " . "\e[1;37m" . $this->equipment["Boots"] . "\e[0m\n";
+        echo $number++ . ". " . "Левая рука: " . "\e[1;37m" . $this->equipment["LeftHand"] . "\e[0m\n";
+        echo $number++ . ". " . "Правая рука: " . "\e[1;37m" . $this->equipment["RightHand"] . "\e[0m\n";
+        echo $number++ . ". " . "Кольцо (1): " . "\e[1;37m" . $this->equipment["FirstRing"] . "\e[0m\n";
+        echo $number++ . ". " . "Колько (2): " . "\e[1;37m" . $this->equipment["SecondRing"] . "\e[0m\n";
+        echo $number++ . ". " . " Акссесуар: " . "\e[1;37m" . $this->equipment["Trinket"] . "\e[0m\n";
+    }
+
+    public function changeEquipment()
+    {
+        $loop = true;
+        while ($loop) {
+
+            $this->showEquipment();
+            echo "Какую экипировку вы хотите изменить? \n";
+
+            switch ((int)readline('Выберите экипировку: ')) {
+                case 1:
+                    $this->inventory->showInventory("Helmet", true);
+                    break;
+                case 2:
+                    $this->inventory->showInventory("Chest", true);
+                    break;
+                case 3:
+                    $this->inventory->showInventory("Cape", true);
+                    break;
+                case 4:
+                    $this->inventory->showInventory("Gloves", true);
+                    break;
+                case 5:
+                    $this->inventory->showInventory("Leggs", true);
+                    break;
+                case 6:
+                    $this->inventory->showInventory("Boots", true);
+                    break;
+                case 7:
+                    $this->inventory->showInventory(["Weapon", "Shield"], true);
+                    break;
+                case 8:
+                    $this->inventory->showInventory(["Weapon", "Shield"], true);
+                    break;
+                case 9:
+                    $this->inventory->showInventory("Ring", true);
+                    break;
+                case 10:
+                    $this->inventory->showInventory("Ring", true);
+                    break;
+                case 11:
+                    $this->inventory->showInventory("Trinket", true);
+                    break;
+                default:
+                    $loop = false;
+                    break;
+            }
+        }
+    }
+
 }

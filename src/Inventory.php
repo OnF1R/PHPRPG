@@ -24,19 +24,39 @@ class Inventory
         }
     }
 
-    public function showInventory()
+    public function showInventory($itemType = null, $uniqueSort = false)
     {
-        $this->inventorySort();
-        $number = 1;
-        echo "\e[1;37mВаш инвентарь:\e[0m\n";
-        foreach ($this->inventory as $item) {
-            if ($item->isStacable) {
-                echo " " .  $number . ". " . $item->name . " " . "(" . $item->rarity . ") x" . $item->count . "\n";
+        $tempInventory = $this->inventory;
+
+        if (!empty($this->inventory)) {
+            if ($uniqueSort) {
+
+                $this->inventorySortForItemType($itemType);
+                $title = "Подходящая экипировка:";
             } else {
-                echo " " .  $number . ". " . $item->name . " " . "(" . $item->rarity . ")\n";
+                $this->inventorySort();
+                $title = "Ваш инвентарь:";
             }
-            $number++;
+            $number = 1;
+            echo "\e[1;37m" . $title . "\e[0m\n";
+            foreach ($this->inventory as $item) {
+                if ($item->isStacable) {
+                    echo " " .  $number . ". " . $item->name . " " . "(" . $item->rarity . ") x" . $item->count . "\n";
+                } else {
+                    echo " " .  $number . ". " . $item->name . " " . "(" . $item->rarity . ")\n";
+                }
+                $number++;
+            }
+        } else {
+            if ($uniqueSort) {
+                $title = "Подходящей экипировки нет";
+            } else {
+                $title = "Инвентарь пуст";
+            }
+            echo "\e[1;37m" . $title . "\e[0m\n";
         }
+
+        $this->inventory = $tempInventory;
     }
 
     public function inventorySort()
@@ -51,5 +71,26 @@ class Inventory
             }
         }
         $this->inventory = array_merge($tempArrayStacable, $tempArrayNotStacable);
+    }
+
+    public function inventorySortForItemType($itemType)
+    {
+        $tempArray = [];
+        for ($i = 0; $i < count($this->inventory); $i++) {
+            if (is_array($itemType)) {
+                foreach ($itemType as $type) {
+                    if ($this->inventory[$i]->type == $type) {
+                        array_push($tempArray, $this->inventory[$i]);
+                        print_r($this->inventory[$i]);
+                    }
+                }
+            } else {
+                if ($this->inventory[$i]->type == $itemType) {
+                    array_push($tempArray, $this->inventory[$i]);
+                    print_r($this->inventory[$i]);
+                }
+            }
+        }
+        $this->inventory = $tempArray;
     }
 }

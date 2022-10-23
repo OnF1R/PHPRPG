@@ -81,10 +81,10 @@ class Game
         $loop = true;
         while ($loop) {
 
-            if($player->isDead) {
+            if ($player->isDead) {
                 $player->resurrection();
             }
-            
+
             echo "\e[1;37mЧто будете делать?\e[0m\n 1. Отравиться в приключение.\n 2. Посетить торговца.\n 3. Инвентарь.\n 4. Экипировка.\n 5. Характеристики.\n";
 
             switch ((int)readline('Выберите действие: ')) {
@@ -104,17 +104,17 @@ class Game
                     $player->inventory->showInventory();
                     break;
                 case 4:
-                    // equipment
+                    $this->equipmentMenu($player);
                     break;
                 case 5:
-                    $this->showStats($player);
+                    $player->showStats();
                     break;
                 case 6:
-                    
+
                 case 7:
-                    
+
                 case 8:
-                    
+
 
                 default:
                     echo "Выберите существующий вариант\n";
@@ -122,18 +122,31 @@ class Game
         }
     }
 
-    public function showStats($player)
+    public function equipmentMenu($player)
     {
-        echo "Имя: " . "\e[1;37m" . $player->name . "\e[0m\n";
-        echo "Уровень: " . "\e[1;37m" . $player->level . "\e[0m\n";
-        echo "Раса: " . "\e[1;37m" . $player->race . "\e[0m\n";
-        echo "Текущее здоровье: " . "\e[1;32m" . $player->currentHealth . "/" . $player->maxHealth . "\e[0m\n";
-        echo "Урон: " . "\e[1;31m" . $player->damage . "\e[0m\n";
-        echo "Удача: " . "\e[1;33m" . $player->luck . "\e[0m\n";
-        echo "Броня: " . "\e[1;37m" . $player->armor . "\e[0m\n";
-        echo "Крит. урон: " . "\e[1;37m" . $player->critDamage . "%\e[0m\n";
-        echo "Крит. шанс: " . "\e[1;37m" . $player->critChance . "%\e[0m\n";
+        $loop = true;
+        while ($loop) {
+            echo " 1. Посмотреть экипировку. \n 2. Изменить экипировку.\n 3. Выйти.\n"; {
+                switch ((int)readline('Выберите действие: ')) {
+                    case 1:
+                        $player->showEquipment();
+                        break;
+                    case 2:
+                        $player->changeEquipment();
+                        break;
+                    default:
+                        $loop = false;
+                        break;
+                }
+            }
+        }
     }
+
+
+
+    
+
+
 
     public function fight($player, $enemy)
     {
