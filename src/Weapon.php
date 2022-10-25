@@ -6,7 +6,6 @@ class Weapon extends Item
 {
 
     public $damage;
-    
 
     public function __construct(string $Name, int $Rarity, int $Level, int $Cost, int $Damage, float $DropChance)
     {

@@ -11,8 +11,11 @@ abstract class Item
     public $cost;
     public $dropChance;
     public $isStacable;
+
     public $type;
+    
     public $isEquapable;
+    public $isEquiped;
     // echo "\e[1;33mЛегендарное!\e[0m\n"; // Желтый
     // echo "\e[1;32mНеобычное!\e[0m\n"; // Зеленый
     // echo "\e[1;34mРедкое!\e[0m\n"; // Синий

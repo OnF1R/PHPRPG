@@ -101,7 +101,7 @@ class Game
                     # code...
                     $loop = false;
                 case 3:
-                    $player->inventory->showInventory();
+                    $player->inventory->checkInventory();
                     break;
                 case 4:
                     $this->equipmentMenu($player);

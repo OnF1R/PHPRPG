@@ -9,6 +9,8 @@ class LootTable
     public $mobDropList;
     public $droppedLoot;
 
+    public $weaponsLevel_1;
+
     // New Weapon(Name, Rarity, Level, Cost, Damage, DropChance)
     // New StacableItem(Name, Rarity, Level, Cost, Count, DropChance)
 
@@ -17,8 +19,14 @@ class LootTable
         $this->mobDropList = [
             new Weapon('Деревянный меч', 0, 1, 3, 2, 5),
             new Weapon('Лук', 0, 1, 3, 2, 5),
+            new Armor("Ржавый шлем", "Helmet", 0, 1, 3, 2, 100),
             new StacableItem('Яблоко', 0, 0, 1, rand(1, 3), 10),
             new StacableItem('Железная руда', 0, 0, 2, 1, 5),
+        ];
+
+        $this->weaponsLevel_1 = [
+            new Weapon('Деревянный меч', 0, 1, 3, 2, 5),
+            new Weapon('Лук', 0, 1, 3, 2, 5),
         ];
     }
 
