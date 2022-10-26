@@ -63,14 +63,14 @@ class Enemy
             $blockedDamage = round($takedDamage / 2);
             $this->currentHealth -= $blockedDamage;
             if ($this->currentHealth <= 0) {
-                $this->death($player->inventory);
+                $this->death($player);
             } else {
                 echo $this->name . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
             }
         } else {
             $this->currentHealth -= $takedDamage;
             if ($this->currentHealth <= 0) {
-                $this->death($player->inventory);
+                $this->death($player);
             } else {
                 echo $this->name . " получил " . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
             }
@@ -87,7 +87,7 @@ class Enemy
         }
     }
 
-    public function death($inventory)
+    public function death($player)
     {
         $this->isDead = true;
         echo $this->name . " \e[1;31mумер\e[0m\n";
@@ -99,10 +99,13 @@ class Enemy
                 } else {
                     echo "Вы получили " .  $loot->name . " " . "(" . $loot->rarity . ")\n";
                 }
-                $inventory->addItemToInventory($loot);
+                $player->getInventory()->addItemToInventory($loot);
             }
         } else {
             echo "К сожалению вы ничего не получили...\n";
         }
+
+        // $gainExp = $player->currentExp += rand(9,12) * $this->level;
+        // echo "Вы получили " . $gainExp . " опыта\n";
     }
 }

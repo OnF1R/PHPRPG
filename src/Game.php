@@ -81,7 +81,7 @@ class Game
         $loop = true;
         while ($loop) {
 
-            if ($player->isDead) {
+            if ($player->getIsDead()) {
                 $player->resurrection();
             }
 
@@ -90,7 +90,7 @@ class Game
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
                     if (rand(0, 1)) {
-                        $enemy = new Enemy(rand($player->level, ($player->level) + 2), $this->races[array_rand($this->races, 1)], $this->names[array_rand($this->names, 1)]);
+                        $enemy = new Enemy(rand($player->getLevel(), ($player->getLevel()) + 2), $this->races[array_rand($this->races, 1)], $this->names[array_rand($this->names, 1)]);
                         $this->fight($player, $enemy);
                     } else {
                         echo "Вам повезло избежать драки\n";
@@ -101,7 +101,7 @@ class Game
                     # code...
                     $loop = false;
                 case 3:
-                    $player->inventory->checkInventory();
+                    $player->getInventory()->checkInventory();
                     break;
                 case 4:
                     $this->equipmentMenu($player);
@@ -151,7 +151,7 @@ class Game
     public function fight($player, $enemy)
     {
         echo "\e[1;37mНа вас напал\e[0m " . "\e[1;31m" . $enemy->name . "\e[0m (" . $enemy->race . ")" . "\n";
-        while (!$player->isDead && !$enemy->isDead) {
+        while (!$player->getIsDead() && !$enemy->isDead) {
             echo " 1. Атаковать.\n 2. Сбежать.\n";
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
@@ -169,6 +169,21 @@ class Game
 
     public function createPlayer($health, $damage, $race, $name, $luck)
     {
-        return new Player($health, $damage, $race, $name, $luck);
+        $player = new Player();
+        $player->setMaxHealth($health);
+        $player->setCurrentHealth($health);
+        $player->setLevel(1);
+        $player->setDamage($damage);
+        $player->setRace($race);
+        $player->setName($name);
+        $player->setLuck($luck);
+        $player->setIsDead(false);
+        $player->setCritChance(0);
+        $player->setCritDamage(0);
+        $player->setArmor(0);
+        $player->setCurrentExp(0);
+        $player->setNextLevelExp(100);
+        $player->createInventory();
+        return $player;
     }
 }

@@ -60,7 +60,7 @@ class Inventory
                 echo " " .  $number . ". " . $item->name . " " . "(" . $item->rarity . ") x" . $item->count . "\n";
             } else {
                 if ($item->isEquiped) {
-                    echo " " .  $number . ". " . $item->name . " " . "(" . $item->rarity . ") \e[1;37m Экипировано\e[0m\n";
+                    echo " " .  $number . ". " . $item->name . " " . "(" . $item->rarity . ") \e[1;37mЭкипировано\e[0m\n";
                 } else {
                     echo " " .  $number . ". " . $item->name . " " . "(" . $item->rarity . ")\n";
                 }
