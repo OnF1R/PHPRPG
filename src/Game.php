@@ -132,7 +132,7 @@ class Game
                         $player->showEquipment();
                         break;
                     case 2:
-                        $player->changeEquipment();
+                        $player->changeEquipmentMenu();
                         break;
                     default:
                         $loop = false;

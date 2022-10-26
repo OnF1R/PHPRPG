@@ -40,7 +40,7 @@ class LootTable
                 for ($i = 0; $i < $itemsCount; $i++) {
                     foreach ($this->mobDropList as $drop) {
                         if ($drop->dropChance >= rand(0, 100)) {
-                            $this->droppedLoot[$i] = $drop;
+                            $this->droppedLoot[$i] = clone $drop;
                         }
                     }
                 }

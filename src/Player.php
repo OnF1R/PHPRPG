@@ -112,12 +112,14 @@ class Player
 
     public function equip($item, $slot)
     {
-        $this->equipment[$slot]->isEquiped = false;
+        if (isset($this->equipment[$slot])) {
+            $this->equipment[$slot]->isEquiped = false;
+        }
         $this->equipment[$slot] = $item;
-        $item->isEquiped = true;
+
+        $this->equipment[$slot]->isEquiped = true;
 
         echo "Эпикирован предмет " . $item->name . " (" . $item->rarity . ")\n";
-        print_r($item);
     }
 
     public function showStats()
@@ -149,11 +151,23 @@ class Player
         echo $number++ . ". " . " Акссесуар: " . "\e[1;37m" . $this->equipment["Trinket"]->name . "\e[0m\n";
     }
 
-    public function eq()
+    public function changeEquipment($slot)
     {
+        $this->inventory->checkInventory($slot, true);
+        $equipableItems =  $this->inventory->getEquipableItems($slot);
+        $chosedEquip = (int)readline('Выберите экипировку: ');
+        switch (true) {
+            case ($chosedEquip >= 1 && $chosedEquip <= count($equipableItems)):
+                $item = $equipableItems[--$chosedEquip];
+                $this->equip($item, $slot);
+                break;
+            default:
+                echo "Не правильно выбран предмет\n";
+                break;
+        }
     }
 
-    public function changeEquipment()
+    public function changeEquipmentMenu()
     {
         $loop = true;
         $this->showEquipment();
@@ -162,49 +176,47 @@ class Player
 
             switch ((int)readline('Выберите экипировку: ')) {
                 case 1:
-                    $this->inventory->checkInventory("Helmet", true);
-                    $equipableItems =  $this->inventory->getEquipableItems("Helmet");
-                    $chosedEquip = (int)readline('Выберите экипировку: ');
-                    switch (true) {
-                        case ($chosedEquip >= 1 && $chosedEquip <= count($equipableItems)):
-                            $chosedEquip--;
-                            $this->equip($equipableItems[$chosedEquip], "Helmet");
-                            $loop = false;
-                            break;
-                        default:
-                            echo "Не правильно выбран предмет\n";
-                            break;
-                    }
+                    $this->changeEquipment("Helmet");
+                    $loop = false;
                     break;
                 case 2:
-                    $this->inventory->checkInventory("Chest", true);
+                    $this->changeEquipment("Chest");
                     break;
                 case 3:
-                    $this->inventory->checkInventory("Cape", true);
+                    $this->changeEquipment("Cape");
+                    $loop = false;
                     break;
                 case 4:
-                    $this->inventory->checkInventory("Gloves", true);
+                    $this->changeEquipment("Gloves");
+                    $loop = false;
                     break;
                 case 5:
-                    $this->inventory->checkInventory("Leggs", true);
+                    $this->changeEquipment("Leggs");
+                    $loop = false;
                     break;
                 case 6:
-                    $this->inventory->checkInventory("Boots", true);
+                    $this->changeEquipment("Boots");
+                    $loop = false;
                     break;
                 case 7:
-                    $this->inventory->checkInventory(["Weapon", "Shield"], true);
+                    $this->changeEquipment("Weapon");
+                    $loop = false;
                     break;
                 case 8:
-                    $this->inventory->checkInventory(["Weapon", "Shield"], true);
+                    $this->changeEquipment(["Weapon", "Shield"]);
+                    $loop = false;
                     break;
                 case 9:
-                    $this->inventory->checkInventory("Ring", true);
+                    $this->changeEquipment("Ring");
+                    $loop = false;
                     break;
                 case 10:
-                    $this->inventory->checkInventory("Ring", true);
+                    $this->changeEquipment("Ring");
+                    $loop = false;
                     break;
                 case 11:
-                    $this->inventory->checkInventory("Trinket", true);
+                    $this->changeEquipment("Trinket");
+                    $loop = false;
                     break;
                 default:
                     $loop = false;
