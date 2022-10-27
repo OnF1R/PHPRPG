@@ -17,6 +17,7 @@ class Player
 
 
     private $equipment;
+    private $abilites;
 
 
     private $luck;
@@ -166,6 +167,23 @@ class Player
         return $this->equipment[$slot];
     }
 
+
+    public function takeExp($exp) {
+        $this->setCurrentExp($this->getCurrentExp()+$exp);
+        if ($this->getCurrentExp() >= $this->getNextLevelExp()) {
+            $this->setCurrentExp($this->getCurrentExp() - $this->getNextLevelExp());
+            $this->setNextLevelExp(floor($this->getNextLevelExp() * 1.3));
+            $this->levelUp();
+        } else {
+            echo $this->getName() . " получил " . $exp . " опыта\n";
+        }
+    }
+
+    public function levelUp() {
+        $this->setLevel($this->getLevel()+1);
+        echo $this->getName() . " повысил уровень, текущий уровень ". $this->getLevel() ."\n";
+    }
+
     public function basicAttack($enemy)
     {
         if ($this->getCritChance() >= rand(1, 100)) {
@@ -236,6 +254,7 @@ class Player
     {
         echo "Имя: " . "\e[1;37m" . $this->getName() . "\e[0m\n";
         echo "Уровень: " . "\e[1;37m" . $this->getLevel(). "\e[0m\n";
+        echo "Опыт: " . "\e[1;37m" . $this->getCurrentExp() . "/" . $this->getNextLevelExp() . "\e[0m\n";
         echo "Раса: " . "\e[1;37m" . $this->getRace() . "\e[0m\n";
         echo "Текущее здоровье: " . "\e[1;32m" . $this->getCurrentHealth() . "/" . $this->getMaxHealth() . "\e[0m\n";
         echo "Урон: " . "\e[1;31m" . $this->getDamage() . "\e[0m\n";

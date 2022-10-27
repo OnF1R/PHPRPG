@@ -105,6 +105,8 @@ class Enemy
             echo "К сожалению вы ничего не получили...\n";
         }
 
+        $player->takeExp(rand($this->level * 2, $this->level * 7));
+
         // $gainExp = $player->currentExp += rand(9,12) * $this->level;
         // echo "Вы получили " . $gainExp . " опыта\n";
     }
