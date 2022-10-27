@@ -28,7 +28,7 @@ class Player
 
     private $isDead;
 
-    
+
 
     public function __construct()
     {
@@ -47,129 +47,160 @@ class Player
         ];
     }
 
-    public function setName($value) {
+    public function setName($value)
+    {
         $this->name = $value;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
-    
-    public function setLevel($value) {
+
+    public function setLevel($value)
+    {
         $this->level = $value;
     }
 
-    public function getLevel() {
+    public function getLevel()
+    {
         return $this->level;
     }
 
-    public function setMaxHealth($value) {
+    public function setMaxHealth($value)
+    {
         $this->maxHealth = $value;
     }
 
-    public function getMaxHealth() {
+    public function getMaxHealth()
+    {
         return $this->maxHealth;
     }
 
-    public function setCurrentHealth($value) {
+    public function setCurrentHealth($value)
+    {
         $this->currentHealth = $value;
     }
 
-    public function getCurrentHealth() {
+    public function getCurrentHealth()
+    {
         return $this->currentHealth;
     }
 
-    public function setDamage($value) {
+    public function setDamage($value)
+    {
         $this->damage = $value;
     }
 
-    public function getDamage() {
+    public function getDamage()
+    {
         return $this->damage;
     }
 
-    public function setRace($value) {
+    public function setRace($value)
+    {
         $this->race = $value;
     }
 
-    public function getRace() {
+    public function getRace()
+    {
         return $this->race;
     }
 
-    public function setLuck($value) {
+    public function setLuck($value)
+    {
         $this->luck = $value;
     }
 
-    public function getLuck() {
+    public function getLuck()
+    {
         return $this->luck;
     }
 
-    public function setArmor($value) {
+    public function setArmor($value)
+    {
         $this->armor = $value;
     }
 
-    public function getArmor() {
+    public function getArmor()
+    {
         return $this->armor;
     }
 
-    public function setCritChance($value) {
+    public function setCritChance($value)
+    {
         $this->critChance = $value;
     }
 
-    public function getCritChance() {
+    public function getCritChance()
+    {
         return $this->critChance;
     }
 
-    public function setCritDamage($value) {
+    public function setCritDamage($value)
+    {
         $this->critDamage = $value;
     }
 
-    public function getCritDamage() {
+    public function getCritDamage()
+    {
         return $this->critDamage;
     }
 
-    public function setNextLevelExp($value) {
+    public function setNextLevelExp($value)
+    {
         $this->nextLevelExp = $value;
     }
 
-    public function getNextLevelExp() {
+    public function getNextLevelExp()
+    {
         return $this->nextLevelExp;
     }
 
-    public function setCurrentExp($value) {
+    public function setCurrentExp($value)
+    {
         $this->currentExp = $value;
     }
 
-    public function getCurrentExp() {
+    public function getCurrentExp()
+    {
         return $this->currentExp;
     }
 
-    public function setIsDead($value) {
+    public function setIsDead($value)
+    {
         $this->isDead = $value;
     }
 
-    public function getIsDead() {
+    public function getIsDead()
+    {
         return $this->isDead;
     }
 
-    public function createInventory() {
+    public function createInventory()
+    {
         $this->inventory = new Inventory;
     }
 
-    public function getInventory() {
+    public function getInventory()
+    {
         return $this->inventory;
     }
 
-    public function setEquipment($item, $slot) {
+    public function setEquipment($item, $slot)
+    {
         $this->equipment[$slot] = $item;
     }
 
-    public function getEquipment($slot) {
+    public function getEquipment($slot)
+    {
         return $this->equipment[$slot];
     }
 
 
-    public function takeExp($exp) {
-        $this->setCurrentExp($this->getCurrentExp()+$exp);
+    public function takeExp($exp)
+    {
+        $this->setCurrentExp($this->getCurrentExp() + $exp);
         if ($this->getCurrentExp() >= $this->getNextLevelExp()) {
             $this->setCurrentExp($this->getCurrentExp() - $this->getNextLevelExp());
             $this->setNextLevelExp(floor($this->getNextLevelExp() * 1.3));
@@ -179,9 +210,29 @@ class Player
         }
     }
 
-    public function levelUp() {
-        $this->setLevel($this->getLevel()+1);
-        echo $this->getName() . " повысил уровень, текущий уровень ". $this->getLevel() ."\n";
+    public function healMaxHealth()
+    {
+        $this->setCurrentHealth($this->getMaxHealth());
+    }
+
+    public function levelUp()
+    {
+        $this->setLevel($this->getLevel() + 1);
+        $this->healMaxHealth();
+        if ($this->getLevel % 5 == 0) {
+            switch (rand(1, 3)) {
+                case 1:
+                    $this->setDamage($this->getDamage() + 1);
+                    break;
+                case 2:
+                    $this->setMaxHealth($this->getMaxHealth() + 5);
+                    break;
+                case 3:
+                    $this->setLuck($this->getLuck() + 1);
+                    break;
+            }
+        }
+        echo $this->getName() . " повысил уровень, текущий уровень " . $this->getLevel() . "\n";
     }
 
     public function basicAttack($enemy)
@@ -253,7 +304,7 @@ class Player
     public function showStats()
     {
         echo "Имя: " . "\e[1;37m" . $this->getName() . "\e[0m\n";
-        echo "Уровень: " . "\e[1;37m" . $this->getLevel(). "\e[0m\n";
+        echo "Уровень: " . "\e[1;37m" . $this->getLevel() . "\e[0m\n";
         echo "Опыт: " . "\e[1;37m" . $this->getCurrentExp() . "/" . $this->getNextLevelExp() . "\e[0m\n";
         echo "Раса: " . "\e[1;37m" . $this->getRace() . "\e[0m\n";
         echo "Текущее здоровье: " . "\e[1;32m" . $this->getCurrentHealth() . "/" . $this->getMaxHealth() . "\e[0m\n";
