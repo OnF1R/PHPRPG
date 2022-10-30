@@ -142,12 +142,6 @@ class Game
         }
     }
 
-
-
-    
-
-
-
     public function fight($player, $enemy)
     {
         echo "\e[1;37mНа вас напал\e[0m " . "\e[1;31m" . $enemy->name . "\e[0m (" . $enemy->race . ")" . "\n";

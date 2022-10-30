@@ -33,7 +33,7 @@ class Player
     public function __construct()
     {
         $this->equipment = [
-            "LeftHand" => new Weapon("", 0, 0, 0, 0, 0),
+            "Weapon" => new Weapon("", 0, 0, 0, 0, 0),
             "RightHand" => new Weapon("", 0, 0, 0, 0, 0),
             "Helmet" => new Armor("", 0, 0, 0, 0, 0, 0),
             "Chest" => new Armor("", 0, 0, 0, 0, 0, 0),
@@ -197,6 +197,15 @@ class Player
         return $this->equipment[$slot];
     }
 
+    public function getWeaponDamage()
+    {
+        if (isset($this->getEquipment("Weapon")->damage)) {
+            return $this->getEquipment("Weapon")->damage;
+        } else {
+            return 0;
+        }
+    }
+
 
     public function takeExp($exp)
     {
@@ -219,16 +228,19 @@ class Player
     {
         $this->setLevel($this->getLevel() + 1);
         $this->healMaxHealth();
-        if ($this->getLevel % 5 == 0) {
+        if ($this->getLevel() % 5 == 0) {
             switch (rand(1, 3)) {
                 case 1:
                     $this->setDamage($this->getDamage() + 1);
+                    echo "Улучшен \e[1;31mурон\e[0m на 1\n";
                     break;
                 case 2:
                     $this->setMaxHealth($this->getMaxHealth() + 5);
+                    echo "Улучшено \e[1;32mздоровье\e[0m на 5\n";
                     break;
                 case 3:
                     $this->setLuck($this->getLuck() + 1);
+                    echo "Улучшена \e[1;33mудача\e[0m на 1\n";
                     break;
             }
         }
@@ -237,10 +249,12 @@ class Player
 
     public function basicAttack($enemy)
     {
+        $weaponDamage = $this->getWeaponDamage();
+
         if ($this->getCritChance() >= rand(1, 100)) {
-            $dealedDamage = $this->getDamage() + floor($this->getDamage() / 100 * $this->getCritDamage());
+            $dealedDamage = $this->getDamage() + $weaponDamage + floor(($this->getDamage() + $weaponDamage) / 100 * $this->getCritDamage());
         } else {
-            $dealedDamage = $this->damage;
+            $dealedDamage = $this->getDamage() + $weaponDamage;
         }
 
         $enemy->fightLogic($this, $dealedDamage);
@@ -303,6 +317,7 @@ class Player
 
     public function showStats()
     {
+        echo "\e[1;37mХарактеристики\e[0m\n";
         echo "Имя: " . "\e[1;37m" . $this->getName() . "\e[0m\n";
         echo "Уровень: " . "\e[1;37m" . $this->getLevel() . "\e[0m\n";
         echo "Опыт: " . "\e[1;37m" . $this->getCurrentExp() . "/" . $this->getNextLevelExp() . "\e[0m\n";
@@ -318,13 +333,14 @@ class Player
     public function showEquipment()
     {
         $number = 1;
+        echo "\e[1;37mЭкипировка\e[0m\n";
         echo $number++ . ". " . "Шлем: " . "\e[1;37m" . $this->getEquipment("Helmet")->name . "\e[0m\n";
         echo $number++ . ". " . "Нагрудник: " . "\e[1;37m" . $this->getEquipment("Chest")->name . "\e[0m\n";
         echo $number++ . ". " . "Плащ: " . "\e[1;37m" . $this->getEquipment("Cape")->name . "\e[0m\n";
         echo $number++ . ". " . "Перчатки: " . "\e[1;37m" . $this->getEquipment("Gloves")->name . "\e[0m\n";
         echo $number++ . ". " . "Поножи: " . "\e[1;37m" . $this->getEquipment("Leggs")->name . "\e[0m\n";
-        echo $number++ . ". " . "Ботинки: " . "\e[1;37m" . $this->getEquipment("Boots")->name . "\e[0m\n";
-        echo $number++ . ". " . "Левая рука: " . "\e[1;37m" . $this->getEquipment("LeftHand")->name . "\e[0m\n";
+        echo $number++ . ". " . "Ботинки: " . "\e[1;37m" . $this->getEquipment("Boots")->name . "\e[0m\n"; 
+        echo $number++ . ". " . "Оружие: " . "\e[1;37m" . $this->getEquipment("Weapon")->name . "\e[0m\n";
         echo $number++ . ". " . "Правая рука: " . "\e[1;37m" . $this->getEquipment("RightHand")->name . "\e[0m\n";
         echo $number++ . ". " . "Кольцо (1): " . "\e[1;37m" . $this->getEquipment("FirstRing")->name . "\e[0m\n";
         echo $number++ . ". " . "Колько (2): " . "\e[1;37m" . $this->getEquipment("SecondRing")->name . "\e[0m\n";

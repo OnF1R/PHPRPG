@@ -39,6 +39,9 @@ abstract class Item
             case 5:
                 $this->rarity = "\e[1;31mМифическое\e[0m";
                 break;
+            case 6:
+                $this->rarity = "\e[1;33mВалюта\e[0m";
+                break;
             default:
                 $this->rarity = "\e[1;37mОбычное\e[0m";
                 break;
