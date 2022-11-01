@@ -46,33 +46,42 @@ class Enemy
         $this->isDead = false;
     }
 
-    public function fightLogic($player, $takedDamage)
+    public function fightLogic($player, $takedDamage, $isCrit = false)
     {
         $energy = 0;
 
-        $this->takeDamage($player, $takedDamage);
+        $isCrit ? $this->takeDamage($player, $takedDamage, true) : $this->takeDamage($player, $takedDamage);
 
         if (!$this->isDead) {
             $this->basicAttack($player);
         }
     }
 
-    public function takeDamage($player, $takedDamage)
+    public function takeDamage($player, $takedDamage, $isCrit = false)
     {
-        if ($this->armor >= rand(1, 100)) {
-            $blockedDamage = round($takedDamage / 2);
-            $this->currentHealth -= $blockedDamage;
-            if ($this->currentHealth <= 0) {
-                $this->death($player);
+        if (!$isCrit) {
+            if ($this->armor >= rand(1, 100)) {
+                $blockedDamage = round($takedDamage / 2);
+                $this->currentHealth -= $blockedDamage;
+                if ($this->currentHealth <= 0) {
+                    $this->death($player);
+                } else {
+                    echo $this->name . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
+                }
             } else {
-                echo $this->name . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
+                $this->currentHealth -= $takedDamage;
+                if ($this->currentHealth <= 0) {
+                    $this->death($player);
+                } else {
+                    echo $this->name . " получил " . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
+                }
             }
         } else {
             $this->currentHealth -= $takedDamage;
             if ($this->currentHealth <= 0) {
                 $this->death($player);
             } else {
-                echo $this->name . " получил " . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
+                echo $this->name . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
             }
         }
     }

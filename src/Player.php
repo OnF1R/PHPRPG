@@ -253,11 +253,13 @@ class Player
 
         if ($this->getCritChance() >= rand(1, 100)) {
             $dealedDamage = $this->getDamage() + $weaponDamage + floor(($this->getDamage() + $weaponDamage) / 100 * $this->getCritDamage());
+            $enemy->fightLogic($this, $dealedDamage, true);
         } else {
             $dealedDamage = $this->getDamage() + $weaponDamage;
+            $enemy->fightLogic($this, $dealedDamage);
         }
 
-        $enemy->fightLogic($this, $dealedDamage);
+        
     }
 
     public function takeDamage($takedDamage, $isCrit = false)
