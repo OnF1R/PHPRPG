@@ -177,6 +177,8 @@ class Game
         $player->setArmor(0);
         $player->setCurrentExp(0);
         $player->setNextLevelExp(100);
+        $player->setMissChance(0);
+        $player->setMagicAmplification(0);
         $player->createInventory();
         return $player;
     }

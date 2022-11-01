@@ -8,7 +8,7 @@ class LootTable
     public $rarity;
     public $mobDropList;
     public $droppedLoot;
-
+    public $abilities;
     public $weaponsLevel_1;
 
     // New Weapon(Name, Rarity, Level, Cost, Damage, DropChance)
@@ -16,6 +16,8 @@ class LootTable
 
     public function __construct()
     {
+        $this->abilities = new Abilities;;
+
         $this->mobDropList = [
             new StacableItem("\e[1;33mЗолото\e[0m", 6, 1, 1, rand(1, 4), 50),
             new Weapon('Деревянный меч', 0, 1, 3, 2, 7),
@@ -23,6 +25,7 @@ class LootTable
             new Armor("Ржавый шлем", "Helmet", 0, 1, 3, 2, 7),
             new StacableItem('Яблоко', 0, 0, 1, rand(1, 3), 25),
             new StacableItem('Железная руда', 0, 0, 2, rand(1, 3), 12),
+            new Armor("Огненный плащ", "Cape", 2, 3, 12, 0, 100),
         ];
 
         $this->weaponsLevel_1 = [

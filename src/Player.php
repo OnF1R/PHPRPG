@@ -15,14 +15,17 @@ class Player
     private $nextLevelExp;
     private $currentExp;
 
+    private $stats;
+
 
     private $equipment;
     private $abilites;
+    private $magicAmplification;
 
 
     private $luck;
     private $armor;
-
+    private $missChance;
     private $critChance;
     private $critDamage;
 
@@ -32,6 +35,12 @@ class Player
 
     public function __construct()
     {
+        $this->stats = [
+            "Strength" => 1,
+            "Agility" => 1,
+            "Intelligence" => 1,
+        ];
+
         $this->equipment = [
             "Weapon" => new Weapon("", 0, 0, 0, 0, 0),
             "RightHand" => new Weapon("", 0, 0, 0, 0, 0),
@@ -197,6 +206,34 @@ class Player
         return $this->equipment[$slot];
     }
 
+    public function setStats($value, $stat)
+    {
+        $this->stats[$stat] = $value;
+    }
+
+    public function getStats($stat)
+    {
+        return $this->stats[$stat];
+    }
+
+    public function setMissChance($value)
+    {
+        $this->missChance = $value;
+    }
+
+    public function getMissChance()
+    {
+        return $this->missChance;
+    }
+
+    public function setMagicAmplification($value) {
+        $this->magicAmplification = $value;
+    }
+
+    public function getMagicAmplification() {
+        return $this->magicAmplification;
+    }
+
     public function getWeaponDamage()
     {
         if (isset($this->getEquipment("Weapon")->damage)) {
@@ -229,7 +266,7 @@ class Player
         $this->setLevel($this->getLevel() + 1);
         $this->healMaxHealth();
         if ($this->getLevel() % 5 == 0) {
-            switch (rand(1, 3)) {
+            switch (rand(1, 6)) {
                 case 1:
                     $this->setDamage($this->getDamage() + 1);
                     echo "Улучшен \e[1;31mурон\e[0m на 1\n";
@@ -241,6 +278,29 @@ class Player
                 case 3:
                     $this->setLuck($this->getLuck() + 1);
                     echo "Улучшена \e[1;33mудача\e[0m на 1\n";
+                    break;
+                case 4:
+                    $this->setStats($this->getStats("Strength") + 1, "Strength");
+                    echo "Улучшена \e[1;37mсила\e[0m на 1\n";
+                    $this->setMaxHealth($this->getMaxHealth() + 3);
+                    echo "Улучшено \e[1;32mздоровье\e[0m на 3\n";
+                    break;
+                case 5:
+                    $this->setStats($this->getStats("Agility") + 1, "Agility");
+                    echo "Улучшена \e[1;37mловкость\e[0m на 1\n";
+                    if (rand(0, 1)) {
+                        $this->setDamage($this->getDamage() + 1);
+                        echo "Улучшен \e[1;31mурон\e[0m на 2\n";
+                    } else {
+                        $this->setMissChance($this->getMissChance() + 1);
+                        echo "Улучшен \e[1;31mшанс уклониться\e[0m на 1\n";
+                    }
+                    break;
+                case 6:
+                    $this->setStats($this->getStats("Intelligence") + 1, "Intelligence");
+                    echo "Улучшен \e[1;37mинтеллект\e[0m на 1\n";
+                    $this->setMagicAmplification($this->getMagicAmplification() + 1);
+                    echo "Улучшено \e[1;31mусилинение способностей\e[0m на 1\n";
                     break;
             }
         }
@@ -258,8 +318,6 @@ class Player
             $dealedDamage = $this->getDamage() + $weaponDamage;
             $enemy->fightLogic($this, $dealedDamage);
         }
-
-        
     }
 
     public function takeDamage($takedDamage, $isCrit = false)
@@ -322,6 +380,9 @@ class Player
         echo "\e[1;37mХарактеристики\e[0m\n";
         echo "Имя: " . "\e[1;37m" . $this->getName() . "\e[0m\n";
         echo "Уровень: " . "\e[1;37m" . $this->getLevel() . "\e[0m\n";
+        echo "Сила: " . "\e[1;37m" . $this->getStats("Strength") . "\e[0m\n";
+        echo "Ловкость: " . "\e[1;37m" . $this->getStats("Agility") . "\e[0m\n";
+        echo "Интеллект: " . "\e[1;37m" . $this->getStats("Intelligence") . "\e[0m\n";
         echo "Опыт: " . "\e[1;37m" . $this->getCurrentExp() . "/" . $this->getNextLevelExp() . "\e[0m\n";
         echo "Раса: " . "\e[1;37m" . $this->getRace() . "\e[0m\n";
         echo "Текущее здоровье: " . "\e[1;32m" . $this->getCurrentHealth() . "/" . $this->getMaxHealth() . "\e[0m\n";
@@ -330,6 +391,8 @@ class Player
         echo "Броня: " . "\e[1;37m" . $this->getArmor() . "\e[0m\n";
         echo "Крит. урон: " . "\e[1;37m" . $this->getCritDamage() . "%\e[0m\n";
         echo "Крит. шанс: " . "\e[1;37m" . $this->getCritChance() . "%\e[0m\n";
+        echo "Шанс уклонения: " . "\e[1;37m" . $this->getMissChance() . "%\e[0m\n";
+        echo "Усиление магии: " . "\e[1;37m" . $this->getMagicAmplification() . "\e[0m\n";
     }
 
     public function showEquipment()
@@ -341,7 +404,7 @@ class Player
         echo $number++ . ". " . "Плащ: " . "\e[1;37m" . $this->getEquipment("Cape")->name . "\e[0m\n";
         echo $number++ . ". " . "Перчатки: " . "\e[1;37m" . $this->getEquipment("Gloves")->name . "\e[0m\n";
         echo $number++ . ". " . "Поножи: " . "\e[1;37m" . $this->getEquipment("Leggs")->name . "\e[0m\n";
-        echo $number++ . ". " . "Ботинки: " . "\e[1;37m" . $this->getEquipment("Boots")->name . "\e[0m\n"; 
+        echo $number++ . ". " . "Ботинки: " . "\e[1;37m" . $this->getEquipment("Boots")->name . "\e[0m\n";
         echo $number++ . ". " . "Оружие: " . "\e[1;37m" . $this->getEquipment("Weapon")->name . "\e[0m\n";
         echo $number++ . ". " . "Правая рука: " . "\e[1;37m" . $this->getEquipment("RightHand")->name . "\e[0m\n";
         echo $number++ . ". " . "Кольцо (1): " . "\e[1;37m" . $this->getEquipment("FirstRing")->name . "\e[0m\n";
