@@ -81,7 +81,7 @@ class Game
         $loop = true;
         while ($loop) {
 
-            if ($player->getIsDead()) {
+            if ($player->__get('isDead')) {
                 $player->resurrection();
             }
 
@@ -90,7 +90,7 @@ class Game
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
                     if (rand(0, 1)) {
-                        $enemy = new Enemy(rand($player->getLevel(), ($player->getLevel()) + 2), $this->races[array_rand($this->races, 1)], $this->names[array_rand($this->names, 1)]);
+                        $enemy = new Enemy(rand($player->__get('level'), ($player->__get('level')) + 2), $this->races[array_rand($this->races, 1)], $this->names[array_rand($this->names, 1)]);
                         $this->fight($player, $enemy);
                     } else {
                         echo "Вам повезло избежать драки\n";
@@ -145,7 +145,7 @@ class Game
     public function fight($player, $enemy)
     {
         echo "\e[1;37mНа вас напал\e[0m " . "\e[1;31m" . $enemy->name . "\e[0m (" . $enemy->race . ")" . "\n";
-        while (!$player->getIsDead() && !$enemy->isDead) {
+        while (!$player->__get('isDead') && !$enemy->isDead) {
             echo " 1. Атаковать.\n 2. Сбежать.\n";
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
@@ -164,21 +164,21 @@ class Game
     public function createPlayer($health, $damage, $race, $name, $luck)
     {
         $player = new Player();
-        $player->setMaxHealth($health);
-        $player->setCurrentHealth($health);
-        $player->setLevel(1);
-        $player->setDamage($damage);
-        $player->setRace($race);
-        $player->setName($name);
-        $player->setLuck($luck);
-        $player->setIsDead(false);
-        $player->setCritChance(0);
-        $player->setCritDamage(0);
-        $player->setArmor(0);
-        $player->setCurrentExp(0);
-        $player->setNextLevelExp(100);
-        $player->setMissChance(0);
-        $player->setMagicAmplification(0);
+        $player->__set('maxHealth',$health);
+        $player->__set('currentHealth',$health);
+        $player->__set('level',1);
+        $player->__set('damage',$damage);
+        $player->__set('race',$race);
+        $player->__set('name',$name);
+        $player->__set('luck',$luck);
+        $player->__set('isDead',false);
+        $player->__set('critChance',0);
+        $player->__set('cirtDamage',0);
+        $player->__set('armor',0);
+        $player->__set('currentExp',0);
+        $player->__set('nextLevelExp',100);
+        $player->__set('missChance',0);
+        $player->__set('magicAmplification',0);
         $player->createInventory();
         return $player;
     }

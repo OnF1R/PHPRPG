@@ -2,6 +2,9 @@
 
 namespace GameLogic;
 
+use GameArmor as Armor;
+use GameCurrency as Currency;
+
 class LootTable
 {
     public $level;
@@ -16,16 +19,16 @@ class LootTable
 
     public function __construct()
     {
-        $this->abilities = new Abilities;;
 
         $this->mobDropList = [
-            new StacableItem("\e[1;33mЗолото\e[0m", 6, 1, 1, rand(1, 4), 50),
-            new Weapon('Деревянный меч', 0, 1, 3, 2, 7),
-            new Weapon('Лук', 0, 1, 3, 2, 7),
-            new Armor("Ржавый шлем", "Helmet", 0, 1, 3, 2, 7),
-            new StacableItem('Яблоко', 0, 0, 1, rand(1, 3), 25),
-            new StacableItem('Железная руда', 0, 0, 2, rand(1, 3), 12),
-            new Armor("Огненный плащ", "Cape", 2, 3, 12, 0, 100),
+            new Currency\Gold,
+            // new Weapon('Деревянный меч', 0, 1, 3, 2, 7),
+            // new Weapon('Лук', 0, 1, 3, 2, 7),
+            // new Armor("Ржавый шлем", "Helmet", 0, 1, 3, 2, 7),
+            // new StacableItem('Яблоко', 0, 0, 1, rand(1, 3), 25),
+            // new StacableItem('Железная руда', 0, 0, 2, rand(1, 3), 12),
+            new Armor\FireCape,
+            new Armor\RustyHelmet,
         ];
 
         $this->weaponsLevel_1 = [

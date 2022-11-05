@@ -56,134 +56,54 @@ class Player
         ];
     }
 
-    public function setName($value)
+    public function __set($name, $value)
     {
-        $this->name = $value;
+        $properties = [
+            'name',
+            'level',
+            'maxHealth',
+            'currentHealth',
+            'damage',
+            'race',
+            'luck',
+            'armor',
+            'critChance',
+            'critDamage',
+            'nextLevelExp',
+            'currentExp',
+            'isDead',
+            'missChance',
+            'magicAmplification',
+        ]; // разрешенные свойства
+
+        if (in_array($name, $properties)) {
+            $this->$name = $value;
+        }
     }
 
-    public function getName()
+    public function __get($name)
     {
-        return $this->name;
-    }
+        $properties = [
+            'name',
+            'level',
+            'maxHealth',
+            'currentHealth',
+            'damage',
+            'race',
+            'luck',
+            'armor',
+            'critChance',
+            'critDamage',
+            'nextLevelExp',
+            'currentExp',
+            'isDead',
+            'missChance',
+            'magicAmplification',
+        ]; // разрешенные свойства
 
-    public function setLevel($value)
-    {
-        $this->level = $value;
-    }
-
-    public function getLevel()
-    {
-        return $this->level;
-    }
-
-    public function setMaxHealth($value)
-    {
-        $this->maxHealth = $value;
-    }
-
-    public function getMaxHealth()
-    {
-        return $this->maxHealth;
-    }
-
-    public function setCurrentHealth($value)
-    {
-        $this->currentHealth = $value;
-    }
-
-    public function getCurrentHealth()
-    {
-        return $this->currentHealth;
-    }
-
-    public function setDamage($value)
-    {
-        $this->damage = $value;
-    }
-
-    public function getDamage()
-    {
-        return $this->damage;
-    }
-
-    public function setRace($value)
-    {
-        $this->race = $value;
-    }
-
-    public function getRace()
-    {
-        return $this->race;
-    }
-
-    public function setLuck($value)
-    {
-        $this->luck = $value;
-    }
-
-    public function getLuck()
-    {
-        return $this->luck;
-    }
-
-    public function setArmor($value)
-    {
-        $this->armor = $value;
-    }
-
-    public function getArmor()
-    {
-        return $this->armor;
-    }
-
-    public function setCritChance($value)
-    {
-        $this->critChance = $value;
-    }
-
-    public function getCritChance()
-    {
-        return $this->critChance;
-    }
-
-    public function setCritDamage($value)
-    {
-        $this->critDamage = $value;
-    }
-
-    public function getCritDamage()
-    {
-        return $this->critDamage;
-    }
-
-    public function setNextLevelExp($value)
-    {
-        $this->nextLevelExp = $value;
-    }
-
-    public function getNextLevelExp()
-    {
-        return $this->nextLevelExp;
-    }
-
-    public function setCurrentExp($value)
-    {
-        $this->currentExp = $value;
-    }
-
-    public function getCurrentExp()
-    {
-        return $this->currentExp;
-    }
-
-    public function setIsDead($value)
-    {
-        $this->isDead = $value;
-    }
-
-    public function getIsDead()
-    {
-        return $this->isDead;
+        if (in_array($name, $properties)) {
+            return $this->$name;
+        }
     }
 
     public function createInventory()
@@ -216,22 +136,16 @@ class Player
         return $this->stats[$stat];
     }
 
-    public function setMissChance($value)
+    public function getPassiveAbilities()
     {
-        $this->missChance = $value;
-    }
-
-    public function getMissChance()
-    {
-        return $this->missChance;
-    }
-
-    public function setMagicAmplification($value) {
-        $this->magicAmplification = $value;
-    }
-
-    public function getMagicAmplification() {
-        return $this->magicAmplification;
+        $abilitesArray = [];
+        foreach ($this->equipment as $item) {
+            if ($item->ability !== null) {
+                $abilitesArray[$item->type]['ItemName'] = $item->name;
+                $abilitesArray[$item->type]['Ability'] = $item->ability;
+            }
+        }
+        return $abilitesArray;
     }
 
     public function getWeaponDamage()
@@ -246,120 +160,129 @@ class Player
 
     public function takeExp($exp)
     {
-        $this->setCurrentExp($this->getCurrentExp() + $exp);
-        if ($this->getCurrentExp() >= $this->getNextLevelExp()) {
-            $this->setCurrentExp($this->getCurrentExp() - $this->getNextLevelExp());
-            $this->setNextLevelExp(floor($this->getNextLevelExp() * 1.3));
+        $this->__set('currentExp', (($this->__get('currentExp') + $exp)));
+        if ($this->__get('currentExp') >= $this->__get('nextLevelExp')) {
+            $this->__set('currentExp',($this->__get('currentExp') - $this->__get('nextLevelExp')));
+            $this->__set('nextLevelExp', (floor($this->__get('nextLevelExp') * 1.3)));
             $this->levelUp();
         } else {
-            echo $this->getName() . " получил " . $exp . " опыта\n";
+            echo $this->__get('name') . " получил " . $exp . " опыта\n";
         }
     }
 
     public function healMaxHealth()
     {
-        $this->setCurrentHealth($this->getMaxHealth());
+        $this->__set('currentHealth', ($this->__get('maxHealth')));
     }
 
     public function levelUp()
     {
-        $this->setLevel($this->getLevel() + 1);
+        $this->__set('level',($this->__get('level') + 1));
         $this->healMaxHealth();
-        if ($this->getLevel() % 5 == 0) {
+        if ($this->__get('level') % 5 == 0) {
             switch (rand(1, 6)) {
                 case 1:
-                    $this->setDamage($this->getDamage() + 1);
+                    $this->__set('damage',$this->__get('damage') + 1);
                     echo "Улучшен \e[1;31mурон\e[0m на 1\n";
                     break;
                 case 2:
-                    $this->setMaxHealth($this->getMaxHealth() + 5);
+                    $this->__set('maxHealth',$this->__get('maxHealth') + 5);
                     echo "Улучшено \e[1;32mздоровье\e[0m на 5\n";
                     break;
                 case 3:
-                    $this->setLuck($this->getLuck() + 1);
+                    $this->__set('luck',$this->__get('luck') + 1);
                     echo "Улучшена \e[1;33mудача\e[0m на 1\n";
                     break;
                 case 4:
                     $this->setStats($this->getStats("Strength") + 1, "Strength");
                     echo "Улучшена \e[1;37mсила\e[0m на 1\n";
-                    $this->setMaxHealth($this->getMaxHealth() + 3);
+                    $this->__set('maxHealth',$this->__get('maxHealth') + 3);
                     echo "Улучшено \e[1;32mздоровье\e[0m на 3\n";
                     break;
                 case 5:
                     $this->setStats($this->getStats("Agility") + 1, "Agility");
                     echo "Улучшена \e[1;37mловкость\e[0m на 1\n";
                     if (rand(0, 1)) {
-                        $this->setDamage($this->getDamage() + 1);
+                        $this->__set('damage',$this->__get('damage') + 2);
                         echo "Улучшен \e[1;31mурон\e[0m на 2\n";
                     } else {
-                        $this->setMissChance($this->getMissChance() + 1);
+                        $this->__set('missChance',$this->__get('missChance') + 1);
                         echo "Улучшен \e[1;31mшанс уклониться\e[0m на 1\n";
                     }
                     break;
                 case 6:
                     $this->setStats($this->getStats("Intelligence") + 1, "Intelligence");
                     echo "Улучшен \e[1;37mинтеллект\e[0m на 1\n";
-                    $this->setMagicAmplification($this->getMagicAmplification() + 1);
+                    $this->__set('magicAmplification',$this->__get('magicAmplification') + 1);
                     echo "Улучшено \e[1;31mусилинение способностей\e[0m на 1\n";
                     break;
             }
         }
-        echo $this->getName() . " повысил уровень, текущий уровень " . $this->getLevel() . "\n";
+        echo $this->__get('name') . " повысил уровень, текущий уровень " . $this->__get('level') . "\n";
     }
 
     public function basicAttack($enemy)
     {
+        // if (count($this->getPassiveAbilities()) !== 0) {
+        //     $abilitesArray = $this->getPassiveAbilities();
+        //     foreach ($abilitesArray as $slotName => $abilityArray) {
+        //         var_dump($abilitesArray);
+        //     }
+        // }
+
         $weaponDamage = $this->getWeaponDamage();
 
-        if ($this->getCritChance() >= rand(1, 100)) {
-            $dealedDamage = $this->getDamage() + $weaponDamage + floor(($this->getDamage() + $weaponDamage) / 100 * $this->getCritDamage());
+        if ($this->__get('critChance') >= rand(1, 100)) {
+            $dealedDamage = $this->__get('damage') + $weaponDamage + floor(($this->__get('damage') + $weaponDamage) / 100 * $this->__get('critDamage'));
             $enemy->fightLogic($this, $dealedDamage, true);
         } else {
-            $dealedDamage = $this->getDamage() + $weaponDamage;
+            $dealedDamage = $this->__get('damage') + $weaponDamage;
             $enemy->fightLogic($this, $dealedDamage);
         }
     }
 
     public function takeDamage($takedDamage, $isCrit = false)
     {
+
+
         if (!$isCrit) {
-            if ($this->getArmor() >= rand(1, 100)) {
+            if ($this->__get('armor') >= rand(1, 100)) {
                 $blockedDamage = round($takedDamage / 2);
-                $this->setCurrentHealth($this->getCurrentHealth() - $blockedDamage);
-                if ($this->getCurrentHealth() <= 0) {
+                $this->__set('currentHealth',$this->__get('currentHealth') - $blockedDamage);
+                if ($this->__get('currentHealth') <= 0) {
                     $this->death($this);
                 } else {
-                    echo $this->getName() . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->getCurrentHealth() . "\n";
+                    echo $this->__get('name') . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             } else {
-                $this->setCurrentHealth($this->getCurrentHealth() - $takedDamage);
-                if ($this->getCurrentHealth() <= 0) {
+                $this->__set('currentHealth',$this->__get('currentHealth') - $takedDamage);
+                if ($this->__get('currentHealth') <= 0) {
                     $this->death($this);
                 } else {
-                    echo $this->getName() . " получил " . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->getCurrentHealth() . "\n";
+                    echo $this->__get('name') . " получил " . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             }
         } else {
-            $this->setCurrentHealth($this->getCurrentHealth() - $takedDamage);
-            if ($this->getCurrentHealth() <= 0) {
+            $this->__set('currentHealth',$this->__get('currentHealth') - $takedDamage);
+            if ($this->__get('currentHealth') <= 0) {
                 $this->death($this);
             } else {
-                echo $this->getName() . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->getCurrentHealth() . "\n";
+                echo $this->__get('name') . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
             }
         }
     }
 
     public function death($player)
     {
-        echo "К сожалению " . $this->getName() . " \e[1;31mумер\e[0m\n";
-        $this->setCurrentHealth($this->getMaxHealth());
-        $this->setIsDead(true);
+        echo "К сожалению " . $this->__get('name') . " \e[1;31mумер\e[0m\n";
+        $this->__set('currentHealth',$this->__get('currentHealth'));
+        $this->__set('isDead',true);
     }
 
     public function resurrection()
     {
-        $this->setIsDead(false);
-        echo $this->getName() . " \e[1;32mвозрождён\e[0m\n";
+        $this->__set('isDead',false);
+        echo $this->__get('name') . " \e[1;32mвозрождён\e[0m\n";
     }
 
     public function equip($item, $slot)
@@ -378,21 +301,21 @@ class Player
     public function showStats()
     {
         echo "\e[1;37mХарактеристики\e[0m\n";
-        echo "Имя: " . "\e[1;37m" . $this->getName() . "\e[0m\n";
-        echo "Уровень: " . "\e[1;37m" . $this->getLevel() . "\e[0m\n";
+        echo "Имя: " . "\e[1;37m" . $this->__get('name') . "\e[0m\n";
+        echo "Уровень: " . "\e[1;37m" . $this->__get('level') . "\e[0m\n";
         echo "Сила: " . "\e[1;37m" . $this->getStats("Strength") . "\e[0m\n";
         echo "Ловкость: " . "\e[1;37m" . $this->getStats("Agility") . "\e[0m\n";
         echo "Интеллект: " . "\e[1;37m" . $this->getStats("Intelligence") . "\e[0m\n";
-        echo "Опыт: " . "\e[1;37m" . $this->getCurrentExp() . "/" . $this->getNextLevelExp() . "\e[0m\n";
-        echo "Раса: " . "\e[1;37m" . $this->getRace() . "\e[0m\n";
-        echo "Текущее здоровье: " . "\e[1;32m" . $this->getCurrentHealth() . "/" . $this->getMaxHealth() . "\e[0m\n";
-        echo "Урон: " . "\e[1;31m" . $this->getDamage() . "\e[0m\n";
-        echo "Удача: " . "\e[1;33m" . $this->getLuck() . "\e[0m\n";
-        echo "Броня: " . "\e[1;37m" . $this->getArmor() . "\e[0m\n";
-        echo "Крит. урон: " . "\e[1;37m" . $this->getCritDamage() . "%\e[0m\n";
-        echo "Крит. шанс: " . "\e[1;37m" . $this->getCritChance() . "%\e[0m\n";
-        echo "Шанс уклонения: " . "\e[1;37m" . $this->getMissChance() . "%\e[0m\n";
-        echo "Усиление магии: " . "\e[1;37m" . $this->getMagicAmplification() . "\e[0m\n";
+        echo "Опыт: " . "\e[1;37m" . $this->__get('currentExp') . "/" . $this->__get('nextLevelExp') . "\e[0m\n";
+        echo "Раса: " . "\e[1;37m" . $this->__get('race') . "\e[0m\n";
+        echo "Текущее здоровье: " . "\e[1;32m" . $this->__get('currentHealth') . "/" . $this->__get('maxHealth') . "\e[0m\n";
+        echo "Урон: " . "\e[1;31m" . $this->__get('damage') . "\e[0m\n";
+        echo "Удача: " . "\e[1;33m" . $this->__get('luck') . "\e[0m\n";
+        echo "Броня: " . "\e[1;37m" . $this->__get('armor') . "\e[0m\n";
+        echo "Крит. урон: " . "\e[1;37m" . $this->__get('critDamage') . "%\e[0m\n";
+        echo "Крит. шанс: " . "\e[1;37m" . $this->__get('critChance') . "%\e[0m\n";
+        echo "Шанс уклонения: " . "\e[1;37m" . $this->__get('missChance') . "%\e[0m\n";
+        echo "Усиление магии: " . "\e[1;37m" . $this->__get('magicAmplification') . "\e[0m\n";
     }
 
     public function showEquipment()
