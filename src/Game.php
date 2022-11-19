@@ -14,7 +14,8 @@ class Game
 
 
     public $enemies = [
-        'FireMage'
+        'FireMage',
+        'FrostMage'
     ];
 
     public function createHero()

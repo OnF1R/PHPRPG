@@ -231,19 +231,23 @@ class Player
         // }
 
         $weaponDamage = $this->getWeaponDamage();
+        if ($this->getEquipment("Weapon")->name !== "") {
+            $weaponName = $this->getEquipment("Weapon")->name;
+        } else {
+            $weaponName = null;
+        }
 
         if ($this->__get('critChance') >= rand(1, 100)) {
             $dealedDamage = $this->__get('damage') + $weaponDamage + floor(($this->__get('damage') + $weaponDamage) / 100 * $this->__get('critDamage'));
-            $enemy->fightLogic($this, $dealedDamage, true);
+            $enemy->fightLogic($this, $dealedDamage, "Физический", $weaponName, true);
         } else {
             $dealedDamage = $this->__get('damage') + $weaponDamage;
-            $enemy->fightLogic($this, $dealedDamage);
+            $enemy->fightLogic($this, $dealedDamage, "Физический", $weaponName);
         }
     }
-
-    public function takeDamage($takedDamage, $damageType = "Физический", $isCrit = false,)
+    public function takeDamage($takedDamage, $damageType = "Физический", $weaponName = null, $isCrit = false)
     {
-
+        if (!isset($weaponName)) $weaponName = "Руки"; 
 
         if (!$isCrit) {
             if ($this->__get('armor') >= rand(1, 100)) {
@@ -252,14 +256,14 @@ class Player
                 if ($this->__get('currentHealth') <= 0) {
                     $this->death($this);
                 } else {
-                    echo $this->__get('name') . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
+                    echo $this->__get('name') . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, (" . $damageType . " ($weaponName)" . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             } else {
                 $this->__set('currentHealth', $this->__get('currentHealth') - $takedDamage);
                 if ($this->__get('currentHealth') <= 0) {
                     $this->death($this);
                 } else {
-                    echo $this->__get('name') . " получил " . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
+                    echo $this->__get('name') . " получил " . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . " ($weaponName)" . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             }
         } else {
@@ -267,7 +271,7 @@ class Player
             if ($this->__get('currentHealth') <= 0) {
                 $this->death($this);
             } else {
-                echo $this->__get('name') . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
+                echo $this->__get('name') . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . " ($weaponName)" .") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
             }
         }
     }

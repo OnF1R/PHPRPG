@@ -5,7 +5,7 @@ namespace GameLogic;
 use GameArmor as Armor;
 use GameCurrency as Currency;
 
-class Enemy
+abstract class Enemy
 {
     private $maxHealth;
     private $currentHealth;
@@ -99,19 +99,12 @@ class Enemy
         }
     }
 
-    public function fightLogic($player, $takedDamage, $isCrit = false)
+    abstract public function fightLogic($player, $takedDamage, $damageType, $weaponName, $isCrit = false);
+
+    public function takeDamage($player, $takedDamage, $damageType = "Физический", $weaponName = null,  $isCrit = false)
     {
-        $energy = 0;
+        if (!isset($weaponName)) $weaponName = "Руки"; 
 
-        $isCrit ? $this->takeDamage($player, $takedDamage, true) : $this->takeDamage($player, $takedDamage);
-
-        if (!$this->__get('isDead')) {
-            $this->basicAttack($player);
-        }
-    }
-
-    public function takeDamage($player, $takedDamage, $damageType = "Физический", $isCrit = false)
-    {
         if (!$isCrit) {
             if ($this->__get('armor') >= rand(1, 100)) {
                 $blockedDamage = round($takedDamage / 2);
@@ -119,14 +112,14 @@ class Enemy
                 if ($this->__get('currentHealth') <= 0) {
                     $this->death($player);
                 } else {
-                    echo $this->__get('name') . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
+                    echo $this->__get('name') . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, (" . $damageType . " ($weaponName)" . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             } else {
                 $this->__set('currentHealth', $this->__get('currentHealth') - $takedDamage);
                 if ($this->__get('currentHealth') <= 0) {
                     $this->death($player);
                 } else {
-                    echo $this->__get('name') . " получил " . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
+                    echo $this->__get('name') . " получил " . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . " ($weaponName)" . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             }
         } else {

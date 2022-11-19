@@ -4,7 +4,7 @@ namespace GameArmor;
 
 use GameLogic\Armor;
 
-class FireCape extends Armor
+class FrostCape extends Armor
 {
 
     private $intelligence;
@@ -12,7 +12,7 @@ class FireCape extends Armor
     public function __construct()
     {
         //Name,Type,Rarity,Cost,Armor,DropChance,Ability
-        $this->intelligence = 3;
-        parent::__construct("Огненный плащ", "Cape", 2, 2, 5, 5, 5);
+        $this->strength = 3;
+        parent::__construct("Ледяной плащ", "Cape", 2, 2, 5, 5, 5);
     }
 }
