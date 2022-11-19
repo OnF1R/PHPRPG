@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
+use GameEnemy\FireMage;
 use GameLogic\Game;
 
 $game = new Game;

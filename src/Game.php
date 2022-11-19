@@ -2,6 +2,8 @@
 
 namespace GameLogic;
 
+use GameArmor\FireCape;
+
 class Game
 {
     public $races = [
@@ -10,25 +12,9 @@ class Game
         'Демон'
     ];
 
-    public $names = [
-        "Aaron",
-        "Abbey",
-        "Abbie",
-        "Abby",
-        "Abdul",
-        "Abe",
-        "Abel",
-        "Abigail",
-        "Abraham",
-        "Abram",
-        "Ada",
-        "Adah",
-        "Adalberto",
-        "Adaline",
-        "Adam",
-        "Adam",
-        "Adan",
-        "Addie"
+
+    public $enemies = [
+        'FireMage'
     ];
 
     public function createHero()
@@ -90,7 +76,9 @@ class Game
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
                     if (rand(0, 1)) {
-                        $enemy = new Enemy(rand($player->__get('level'), ($player->__get('level')) + 2), $this->races[array_rand($this->races, 1)], $this->names[array_rand($this->names, 1)]);
+                        //$enemy = new Enemy(rand($player->__get('level'), ($player->__get('level')) + 2), $this->races[array_rand($this->races, 1)], $this->names[array_rand($this->names, 1)]);
+                        $randomEnemy = "GameEnemy\\" .  $this->enemies[array_rand($this->enemies)];
+                        $enemy = new $randomEnemy;
                         $this->fight($player, $enemy);
                     } else {
                         echo "Вам повезло избежать драки\n";
@@ -144,7 +132,7 @@ class Game
 
     public function fight($player, $enemy)
     {
-        echo "\e[1;37mНа вас напал\e[0m " . "\e[1;31m" . $enemy->name . "\e[0m (" . $enemy->race . ")" . "\n";
+        echo "\e[1;37mНа вас напал\e[0m " . "\e[1;31m" . $enemy->__get('name') . "\e[0m (Уровень: " . $enemy->__get('level') . ") (" . $enemy->race . ")" . "\n";
         while (!$player->__get('isDead') && !$enemy->isDead) {
             echo " 1. Атаковать.\n 2. Сбежать.\n";
             switch ((int)readline('Выберите действие: ')) {
@@ -164,21 +152,21 @@ class Game
     public function createPlayer($health, $damage, $race, $name, $luck)
     {
         $player = new Player();
-        $player->__set('maxHealth',$health);
-        $player->__set('currentHealth',$health);
-        $player->__set('level',1);
-        $player->__set('damage',$damage);
-        $player->__set('race',$race);
-        $player->__set('name',$name);
-        $player->__set('luck',$luck);
-        $player->__set('isDead',false);
-        $player->__set('critChance',0);
-        $player->__set('cirtDamage',0);
-        $player->__set('armor',0);
-        $player->__set('currentExp',0);
-        $player->__set('nextLevelExp',100);
-        $player->__set('missChance',0);
-        $player->__set('magicAmplification',0);
+        $player->__set('maxHealth', $health);
+        $player->__set('currentHealth', $health);
+        $player->__set('level', 1);
+        $player->__set('damage', $damage);
+        $player->__set('race', $race);
+        $player->__set('name', $name);
+        $player->__set('luck', $luck);
+        $player->__set('isDead', false);
+        $player->__set('critChance', 0);
+        $player->__set('critDamage', 0);
+        $player->__set('armor', 0);
+        $player->__set('currentExp', 0);
+        $player->__set('nextLevelExp', 100);
+        $player->__set('missChance', 0);
+        $player->__set('magicAmplification', 0);
         $player->createInventory();
         return $player;
     }

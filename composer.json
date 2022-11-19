@@ -4,7 +4,8 @@
             "GameLogic\\": "src/",
             "GameArmor\\": "src/items/armor",
             "GameCurrency\\": "src/items/currency",
-            "GameWeapon\\": "src/items/weapon"
+            "GameWeapon\\": "src/items/weapon",
+            "GameEnemy\\": "src/Enemy"
         }
     }
 }

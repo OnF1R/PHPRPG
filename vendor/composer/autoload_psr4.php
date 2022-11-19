@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'GameWeapon\\' => array($baseDir . '/src/items/weapon'),
     'GameLogic\\' => array($baseDir . '/src'),
+    'GameEnemy\\' => array($baseDir . '/src/Enemy'),
     'GameCurrency\\' => array($baseDir . '/src/items/currency'),
     'GameArmor\\' => array($baseDir . '/src/items/armor'),
 );

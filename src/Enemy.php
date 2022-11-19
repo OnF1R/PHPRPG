@@ -2,48 +2,101 @@
 
 namespace GameLogic;
 
+use GameArmor as Armor;
+use GameCurrency as Currency;
+
 class Enemy
 {
-    public $maxHealth;
-    public $currentHealth;
+    private $maxHealth;
+    private $currentHealth;
 
-    public $damage;
-    public $race;
-    public $name;
-    public $lootTable;
-    public $level;
-    public $armor;
+    private $damage;
+    private $race;
+    private $name;
+    private $lootTable;
+    private $dropList;
+    private $level;
+    private $armor;
 
-    public $isDead;
+    private $isDead;
+    private $missChance;
+    private $magicAmplification;
 
-    public $critChance;
-    public $critDamage;
+    private $critChance;
+    private $critDamage;
 
     public function __construct(int $Level, string $Race, string $Name, int $Damage = 2, int $maxHealth = 10)
     {
-        $this->level = $Level;
-        $this->maxHealth = rand($maxHealth * $Level - 5, $maxHealth * $Level + 5);
-        $this->race = $Race;
-        $this->damage = $Damage;
-        $this->name = $Name;
+        $this->__set('level', $Level);
+        $this->__set('maxHealth', rand($maxHealth * $Level - 5, $maxHealth * $Level + 5));
+        $this->__set('race', $Race);
+        $this->__set('damage',$Damage);
+        $this->__set('name',$Name);
+
         $this->lootTable = new LootTable;
 
-        if ($this->race === "Орк") {
-            $this->damage += 2;
+        if ($Race === "Орк") {
+            $this->__set('damage', $this->__get('damage') + 2);
         }
-        if ($this->race === "Демон") {
-            $this->maxHealth += 10;
+        if ($Race === "Демон") {
+            $this->__set('maxHealth', $this->__get('maxHealth') + 10);
         }
 
-        $this->critChance = rand(0, 15);
+        $this->__set('critChance',rand(0, 15));
 
-        $this->critDamage = rand(10, 100);
+        $this->__set('critDamage', rand(10, 100));
 
-        $this->armor = rand(0, 25);
+        $this->__set('armor', rand(0, 25));
 
-        $this->currentHealth = $this->maxHealth;
+        $this->__set('currentHealth', $this->__get('maxHealth'));
 
-        $this->isDead = false;
+        $this->__set('isDead', false);
+    }
+
+    public function __set($name, $value)
+    {
+        $properties = [
+            'name',
+            'level',
+            'maxHealth',
+            'currentHealth',
+            'damage',
+            'race',
+            'armor',
+            'critChance',
+            'critDamage',
+            'isDead',
+            'missChance',
+            'magicAmplification',
+            'dropList',
+        ]; // разрешенные свойства
+
+        if (in_array($name, $properties)) {
+            $this->$name = $value;
+        }
+    }
+
+    public function __get($name)
+    {
+        $properties = [
+            'name',
+            'level',
+            'maxHealth',
+            'currentHealth',
+            'damage',
+            'race',
+            'armor',
+            'critChance',
+            'critDamage',
+            'isDead',
+            'missChance',
+            'magicAmplification',
+            'dropList',
+        ]; // разрешенные свойства
+
+        if (in_array($name, $properties)) {
+            return $this->$name;
+        }
     }
 
     public function fightLogic($player, $takedDamage, $isCrit = false)
@@ -52,55 +105,55 @@ class Enemy
 
         $isCrit ? $this->takeDamage($player, $takedDamage, true) : $this->takeDamage($player, $takedDamage);
 
-        if (!$this->isDead) {
+        if (!$this->__get('isDead')) {
             $this->basicAttack($player);
         }
     }
 
-    public function takeDamage($player, $takedDamage, $isCrit = false)
+    public function takeDamage($player, $takedDamage, $damageType = "Физический", $isCrit = false)
     {
         if (!$isCrit) {
-            if ($this->armor >= rand(1, 100)) {
+            if ($this->__get('armor') >= rand(1, 100)) {
                 $blockedDamage = round($takedDamage / 2);
-                $this->currentHealth -= $blockedDamage;
-                if ($this->currentHealth <= 0) {
+                $this->__set('currentHealth', $this->__get('currentHealth') - $blockedDamage);
+                if ($this->__get('currentHealth') <= 0) {
                     $this->death($player);
                 } else {
-                    echo $this->name . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
+                    echo $this->__get('name') . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             } else {
-                $this->currentHealth -= $takedDamage;
-                if ($this->currentHealth <= 0) {
+                $this->__set('currentHealth', $this->__get('currentHealth') - $takedDamage);
+                if ($this->__get('currentHealth') <= 0) {
                     $this->death($player);
                 } else {
-                    echo $this->name . " получил " . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
+                    echo $this->__get('name') . " получил " . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             }
         } else {
-            $this->currentHealth -= $takedDamage;
-            if ($this->currentHealth <= 0) {
+            $this->__set('currentHealth', $this->__get('currentHealth') - $takedDamage);
+            if ($this->__get('currentHealth') <= 0) {
                 $this->death($player);
             } else {
-                echo $this->name . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, его \e[1;32mздоровье\e[0m " . $this->currentHealth . "\n";
+                echo $this->__get('name') . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
             }
         }
     }
 
     public function basicAttack($enemy)
     {
-        if ($this->critChance >= rand(1, 100)) {
-            $dealedDamage = $this->damage + floor($this->damage / 100 * $this->critDamage);
+        if ($this->__get('critChance') >= rand(1, 100)) {
+            $dealedDamage = $this->__get('damage') + floor($this->__get('damage') / 100 * $this->__get('critDamage'));
             $enemy->takeDamage($dealedDamage, true);
         } else {
-            $enemy->takeDamage($this->damage);
+            $enemy->takeDamage($this->__get('damage'));
         }
     }
 
     public function death($player)
     {
-        $this->isDead = true;
-        echo $this->name . " \e[1;31mумер\e[0m\n";
-        $droppedLoot = $this->lootTable->dropLoot($this->level);
+        $this->__set('isDead', true);
+        echo $this->__get('name') . " \e[1;31mумер\e[0m\n";
+        $droppedLoot = $this->lootTable->dropLoot($this->__get('level'), $this->dropList);
         if (isset($droppedLoot)) {
             foreach ($droppedLoot as $loot) {
                 if ($loot->isStacable) {
@@ -114,7 +167,7 @@ class Enemy
             echo "К сожалению вы ничего не получили...\n";
         }
 
-        $player->takeExp(rand($this->level * 2, $this->level * 7));
+        $player->takeExp(rand($this->__get('level') * 2, $this->__get('level') * 7));
 
         // $gainExp = $player->currentExp += rand(9,12) * $this->level;
         // echo "Вы получили " . $gainExp . " опыта\n";

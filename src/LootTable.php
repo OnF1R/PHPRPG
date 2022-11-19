@@ -20,32 +20,22 @@ class LootTable
     public function __construct()
     {
 
-        $this->mobDropList = [
-            new Currency\Gold,
-            // new Weapon('Деревянный меч', 0, 1, 3, 2, 7),
-            // new Weapon('Лук', 0, 1, 3, 2, 7),
-            // new Armor("Ржавый шлем", "Helmet", 0, 1, 3, 2, 7),
-            // new StacableItem('Яблоко', 0, 0, 1, rand(1, 3), 25),
-            // new StacableItem('Железная руда', 0, 0, 2, rand(1, 3), 12),
-            new Armor\FireCape,
-            new Armor\RustyHelmet,
-        ];
-
-        $this->weaponsLevel_1 = [
-            new Weapon('Деревянный меч', 0, 1, 3, 2, 5),
-            new Weapon('Лук', 0, 1, 3, 2, 5),
-        ];
+        // $this->mobDropList = [
+        //     new Currency\Gold,
+        //     new Armor\FireCape,
+        //     new Armor\RustyHelmet,
+        // ];
     }
 
 
 
-    public function dropLoot($level)
+    public function dropLoot($level, $dropList)
     {
         if ($level > 0) {
             $itemsCount = rand(0, 2);
             if ($itemsCount !== 0) {
                 for ($i = 0; $i < $itemsCount; $i++) {
-                    foreach ($this->mobDropList as $drop) {
+                    foreach ($dropList as $drop) {
                         if ($drop->dropChance >= rand(0, 100)) {
                             $this->droppedLoot[$i] = clone $drop;
                         }
