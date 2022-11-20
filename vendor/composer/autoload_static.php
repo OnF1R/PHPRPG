@@ -11,6 +11,7 @@ class ComposerStaticInit25b1c5f7aeb865cf9c91a4127dbc9cc8
         array (
             'GameWeapon\\' => 11,
             'GameLogic\\' => 10,
+            'GameItemToCraft\\' => 16,
             'GameEnemy\\' => 10,
             'GameCurrency\\' => 13,
             'GameArmor\\' => 10,
@@ -25,6 +26,10 @@ class ComposerStaticInit25b1c5f7aeb865cf9c91a4127dbc9cc8
         'GameLogic\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'GameItemToCraft\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/items/ItemToCraft',
         ),
         'GameEnemy\\' => 
         array (

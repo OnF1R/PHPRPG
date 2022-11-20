@@ -7,6 +7,7 @@ use GameLogic\Enemy;
 use GameArmor as Armor;
 use GameCurrency as Currency;
 use GameWeapon as Weapon;
+use GameItemToCraft as Craft;
 
 class FireMage extends Enemy
 {
@@ -17,7 +18,8 @@ class FireMage extends Enemy
 
         $this->__set('dropList', [
             new Currency\Gold(),
-            new Armor\FireCape()
+            new Armor\FireCape(),
+            new Craft\FireShard()
         ]);
 
         $this->energy = 0;

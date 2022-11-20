@@ -24,6 +24,26 @@ class Inventory
         }
     }
 
+    public function deleteFromInventory($item, $count = null) {
+        foreach($this->inventory as $alreadyItem) {
+            if ($alreadyItem->name == $item) {
+                if ($alreadyItem->isStacable) {
+                    if ($alreadyItem->count > $count) {
+                        $alreadyItem->count -= $count;
+                        echo "Потрачено " . $alreadyItem->name . " x" . $count . "\n";
+                    } else {
+                        echo "Ошибка, недостаточно ресурсов\n";
+                        break;
+                    }
+                } else {
+                    unset($this->inventory[array_search($alreadyItem,$this->inventory)]);
+                    echo "Удалено\n";
+                    break;
+                }
+            }
+        }
+    }
+
     public function getEquipableItems($itemType) {
         return $this->inventorySortForItemType($itemType);
     }

@@ -3,9 +3,10 @@
         "psr-4": {
             "GameLogic\\": "src/",
             "GameArmor\\": "src/items/armor",
-            "GameCurroency\\": "src/items/currency",
+            "GameCurrency\\": "src/items/currency",
             "GameWeapon\\": "src/items/weapon",
-            "GameEnemy\\": "src/Enemy"
+            "GameEnemy\\": "src/Enemy",
+            "GameItemToCraft\\": "src/items/ItemToCraft"
         }
     }
 }

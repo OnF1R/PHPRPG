@@ -21,6 +21,10 @@ class Game
         'DarkMage'
     ];
 
+    public $craftableItems = [
+        'GameWeapon\\FireSword',
+    ];
+
     public function createHero()
     {
         $loop = true;
@@ -75,7 +79,7 @@ class Game
                 $player->resurrection();
             }
 
-            echo "\e[1;37mЧто будете делать?\e[0m\n 1. Отравиться в приключение.\n 2. Посетить торговца.\n 3. Инвентарь.\n 4. Экипировка.\n 5. Характеристики.\n";
+            echo "\e[1;37mЧто будете делать?\e[0m\n 1. Отравиться в приключение.\n 2. Посетить торговца.\n 3. Инвентарь.\n 4. Экипировка.\n 5. Характеристики.\n 6. Крафт\n";
 
             switch ((int)readline('Выберите действие: ')) {
                 case 1:
@@ -102,7 +106,8 @@ class Game
                     $player->showStats();
                     break;
                 case 6:
-
+                    $this->craftMenu($player->getInventory());
+                    break;
                 case 7:
 
                 case 8:
@@ -150,6 +155,51 @@ class Game
                     # code...
                     break;
             }
+        }
+    }
+
+    public function craftMenu($inventory)
+    {
+        $loop = true;
+        while ($loop) {
+            echo " 1. Создать предмет. \n 2. Выйти.\n"; {
+                switch ((int)readline('Выберите действие: ')) {
+                    case 1:
+                        $this->chooseCraft($inventory,);
+                        break;
+                    default:
+                        $loop = false;
+                        break;
+                }
+            }
+        }
+    }
+
+    public function chooseCraft($inventory)
+    {
+        echo "Доступные предметы для создания: \n";
+        $number = 1;
+        $craftableItems = [];
+        foreach ($this->craftableItems as $craftableItem) {
+            $item = new $craftableItem();
+            array_push($craftableItems, $craftableItem);
+            echo $number++ . ". \e[1;37m" .  $item->name . "\e[0m, для создания необходимо ( ";
+            foreach ($item->craftPattern as $item => $count) {
+                echo $item . " (x" . $count . ")";
+            }
+            echo " )\n";
+        }
+
+
+        $chosedItem = (int)readline('Выберите предмет: ');
+        switch (true) {
+            case ($chosedItem >= 1 && $chosedItem <= count($this->craftableItems)):
+                --$chosedItem;
+                (new Craft())->craftItem($inventory, (new $craftableItems[$chosedItem])->craftPattern, (new $craftableItems[$chosedItem]));
+                break;
+            default:
+                echo "Не правильно выбран предмет\n";
+                break;
         }
     }
 
