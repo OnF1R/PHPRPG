@@ -99,9 +99,14 @@ abstract class Enemy
         }
     }
 
+    public function healMaxHealth()
+    {
+        $this->__set('currentHealth', ($this->__get('maxHealth')));
+    }
+
     abstract public function fightLogic($player, $takedDamage, $damageType, $weaponName, $isCrit = false);
 
-    public function takeDamage($player, $takedDamage, $damageType = "Физический", $weaponName = null,  $isCrit = false)
+    public function takeDamage($player, $takedDamage, $damageTypeText = "Физический", $damageType = "physical", $weaponName = null,  $isCrit = false)
     {
         if (!isset($weaponName)) $weaponName = "Руки"; 
 
@@ -112,14 +117,14 @@ abstract class Enemy
                 if ($this->__get('currentHealth') <= 0) {
                     $this->death($player);
                 } else {
-                    echo $this->__get('name') . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, (" . $damageType . " ($weaponName)" . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
+                    echo $this->__get('name') . " заблокировал удар и получил " . $blockedDamage . " \e[1;31mурона\e[0m, (" . $damageTypeText . " ($weaponName)" . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             } else {
                 $this->__set('currentHealth', $this->__get('currentHealth') - $takedDamage);
                 if ($this->__get('currentHealth') <= 0) {
                     $this->death($player);
                 } else {
-                    echo $this->__get('name') . " получил " . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . " ($weaponName)" . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
+                    echo $this->__get('name') . " получил " . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageTypeText . " ($weaponName)" . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
                 }
             }
         } else {
@@ -127,7 +132,7 @@ abstract class Enemy
             if ($this->__get('currentHealth') <= 0) {
                 $this->death($player);
             } else {
-                echo $this->__get('name') . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageType . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
+                echo $this->__get('name') . " получил \e[1;31mкритический удар \e[0m" . $takedDamage . " \e[1;31mурона\e[0m, (" . $damageTypeText . ") его \e[1;32mздоровье\e[0m " . $this->__get('currentHealth') . "\n";
             }
         }
     }

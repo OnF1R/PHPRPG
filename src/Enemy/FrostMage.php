@@ -43,17 +43,19 @@ class FrostMage extends Enemy
 
     public function snowball($enemy)
     {
-        $damageType = "\e[0;34mЛед\e[0m";
+        $damageType = "ice";
+        $damageTypeText = "\e[0;34mЛед\e[0m";
         $weaponName = "Снежок";
         $dealedDamage = $this->__get('damage') + $this->__get('magicAmplification');
-        $enemy->takeDamage($dealedDamage, $damageType, $weaponName);
+        $enemy->takeDamage($dealedDamage, $damageTypeText, $damageType, $weaponName);
     }
 
     public function ultraSnowball($enemy)
     {
-        $damageType = "\e[0;34mЛед\e[0m";
+        $damageType = "ice";
+        $damageTypeText = "\e[0;34mЛед\e[0m";
         $weaponName = "Ультра снежок";
         $dealedDamage = $this->__get('damage') * 3 + $this->__get('magicAmplification');
-        $enemy->takeDamage($dealedDamage, $damageType, $weaponName);
+        $enemy->takeDamage($dealedDamage, $damageTypeText, $damageType,  $weaponName);
     }
 }

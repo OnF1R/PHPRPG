@@ -10,6 +10,6 @@ class FireSword extends Weapon
 
     public function __construct()
     {
-        parent::__construct("Огненный меч", 2, 2, 5, 7, 100);
+        parent::__construct("Огненный меч", 2, 2, 5, 7, 0);
     }
 }
